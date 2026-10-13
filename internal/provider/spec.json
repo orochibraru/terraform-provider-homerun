@@ -250,6 +250,18 @@
 					"default": false
 				},
 				{
+					"kind": "strings",
+					"name": "gitWatchPaths",
+					"tf": "git_watch_paths",
+					"description": "Repo path globs a push has to change a file under to deploy. Empty lets every file through."
+				},
+				{
+					"kind": "strings",
+					"name": "gitIgnorePaths",
+					"tf": "git_ignore_paths",
+					"description": "Repo path globs whose changes alone never deploy on push."
+				},
+				{
 					"kind": "bool",
 					"name": "requireStatusChecks",
 					"tf": "require_status_checks",
@@ -886,7 +898,7 @@
 					"tf": "kind",
 					"forceNew": true,
 					"required": true,
-					"description": "image (a container) or exec (a host command, needs write access to System)."
+					"description": "image (a container), script (source code on a runtime image) or exec (a host command, needs write access to System)."
 				},
 				{
 					"kind": "string",
@@ -922,10 +934,87 @@
 					"default": "latest"
 				},
 				{
+					"kind": "string",
+					"name": "runtime",
+					"tf": "runtime",
+					"description": "A script job's runtime: bun, node, deno, python or shell."
+				},
+				{
+					"kind": "string",
+					"name": "source",
+					"tf": "source",
+					"description": "A script job's source code."
+				},
+				{
 					"kind": "stringMap",
 					"name": "envVars",
 					"tf": "env_vars",
 					"sensitive": true
+				},
+				{
+					"kind": "objects",
+					"name": "files",
+					"tf": "files",
+					"description": "Text files written into the container before it starts.",
+					"fields": [
+						{
+							"kind": "string",
+							"name": "path",
+							"tf": "path",
+							"required": true
+						},
+						{
+							"kind": "string",
+							"name": "content",
+							"tf": "content",
+							"required": true
+						},
+						{
+							"kind": "string",
+							"name": "mode",
+							"tf": "mode",
+							"description": "Octal permissions set after writing it, like 600."
+						}
+					]
+				},
+				{
+					"kind": "objects",
+					"name": "mounts",
+					"tf": "mounts",
+					"description": "Storage volumes mounted into the container, on this host only.",
+					"fields": [
+						{
+							"kind": "string",
+							"name": "volumeId",
+							"tf": "volume_id",
+							"required": true
+						},
+						{
+							"kind": "string",
+							"name": "containerPath",
+							"tf": "container_path",
+							"required": true
+						},
+						{
+							"kind": "bool",
+							"name": "readOnly",
+							"tf": "read_only",
+							"default": false
+						}
+					]
+				},
+				{
+					"kind": "string",
+					"name": "runAsUser",
+					"tf": "run_as_user",
+					"description": "Docker User (uid, uid:gid, name or name:group), unset keeps the image's."
+				},
+				{
+					"kind": "bool",
+					"name": "dockerSocket",
+					"tf": "docker_socket",
+					"default": false,
+					"description": "Mount the Docker socket at /var/run/docker.sock, needs write access to System."
 				},
 				{
 					"kind": "string",
@@ -963,7 +1052,7 @@
 				}
 			],
 			"collectionPath": "/cron-jobs",
-			"description": "A scheduled job: a container or a host command.",
+			"description": "A scheduled job: a container, source code on a runtime image, or a host command.",
 			"importId": ["id"],
 			"itemPath": "/cron-jobs/{id}",
 			"label": "name",
@@ -1050,6 +1139,12 @@
 					"kind": "strings",
 					"name": "events",
 					"tf": "events"
+				},
+				{
+					"kind": "bool",
+					"name": "groupMessages",
+					"tf": "group_messages",
+					"default": false
 				}
 			],
 			"collectionPath": "/notification-channels",
