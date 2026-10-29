@@ -88,6 +88,8 @@ resource "homerun_service" "example" {
 - `env_files` (List of String)
 - `env_vars` (Map of String, Sensitive)
 - `environment_name` (String)
+- `exposed_ports` (List of Object) See the nested schema for `exposed_ports`
+  below.
 - `git_bake_file` (String)
 - `git_build_context` (String)
 - `git_build_method` (String) Defaults to `"dockerfile"`.
@@ -177,6 +179,9 @@ resource "homerun_service" "example" {
 - `update_check_enabled` (Boolean) Image services: watch the registry for a
   newer release of tag, or a new image behind a floating tag. The
   homerun_service_version data source reads what it found. Defaults to `false`.
+- `update_scope` (String) Image services: how far an update may go from a
+  version tag: major (any newer release), minor (same major) or patch (same
+  major.minor). Defaults to `"major"`.
 - `update_trial_enabled` (Boolean) Image services: try each update in a
   throwaway container before notifying it. Defaults to `true`.
 - `uptime_enabled` (Boolean)
@@ -189,6 +194,16 @@ resource "homerun_service" "example" {
   dashboard, the API or the CLI. Pinning here is setting tag.
 - `pinned_locally` (Boolean)
 - `registry_password_set` (Boolean)
+
+### Nested schema for `exposed_ports`
+
+Required:
+
+- `port` (Number)
+
+Optional:
+
+- `protocol` (String) Defaults to `"tcp"`.
 
 ### Nested schema for `published_ports`
 

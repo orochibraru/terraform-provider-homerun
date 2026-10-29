@@ -100,6 +100,11 @@
 					"tf": "update_check_enabled"
 				},
 				{
+					"kind": "string",
+					"name": "updateScope",
+					"tf": "update_scope"
+				},
+				{
 					"kind": "bool",
 					"name": "updateTrialEnabled",
 					"tf": "update_trial_enabled"
@@ -264,6 +269,13 @@
 					"tf": "update_check_enabled",
 					"default": false,
 					"description": "Image services: watch the registry for a newer release of tag, or a new image behind a floating tag. The homerun_service_version data source reads what it found."
+				},
+				{
+					"kind": "string",
+					"name": "updateScope",
+					"tf": "update_scope",
+					"default": "major",
+					"description": "Image services: how far an update may go from a version tag: major (any newer release), minor (same major) or patch (same major.minor)."
 				},
 				{
 					"kind": "bool",
@@ -520,6 +532,25 @@
 					"kind": "int",
 					"name": "httpCacheTtl",
 					"tf": "http_cache_ttl"
+				},
+				{
+					"kind": "objects",
+					"name": "exposedPorts",
+					"tf": "exposed_ports",
+					"fields": [
+						{
+							"kind": "int",
+							"name": "port",
+							"tf": "port",
+							"required": true
+						},
+						{
+							"kind": "string",
+							"name": "protocol",
+							"tf": "protocol",
+							"default": "tcp"
+						}
+					]
 				},
 				{
 					"kind": "objects",
